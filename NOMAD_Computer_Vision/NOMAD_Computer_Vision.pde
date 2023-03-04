@@ -59,5 +59,8 @@ void draw(){
   //minimap
   drawMinimap(LEFT,TOP,height*0.3);
   
+  //Arduino GUI
+  drawArduino(RIGHT, TOP, height*0.2);
+  
   Loop();
 }

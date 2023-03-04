@@ -62,3 +62,39 @@ float PIN(int pin){
     return 0;
   }
 }
+
+void drawArduino(int xPos, int yPos, float s){  
+  float p = s*0.03;
+  float x = xPos == LEFT ? s*1.1 : width - s*1.1;
+  float y = yPos == TOP ? s*0.6 : height - s*0.6;
+  
+  fill(40);
+  stroke(255); 
+  rect(x-s, y-s/2, s*2, s, s*0.1);
+  line(x-s, (y-s*0.5)+p*6, x+s, (y-s*0.5)+p*6);
+  
+  //tabs
+  noStroke();
+  textAlign(CENTER,CENTER);
+  textSize(p*3);
+  
+  //Serial Monitor
+  fill(100);
+  rect(p*1+x-s, p*1+y-s/2, p*21, p*4, s*0.2);
+  fill(0);
+  text("Serial Monitor",p*11.5+x-s, p*2.5+y-s/2);
+  
+  //Run & Pause Code
+  fill(100);
+  rect(p*23+x-s, p*1+y-s/2, p*4, p*4, s*0.2);
+  fill(0);
+  textSize(p*2);
+  text("▶",p*25.1+x-s, p*2.6+y-s/2);
+  
+  //Restart Code
+  fill(100);
+  rect(p*28+x-s, p*1+y-s/2, p*4, p*4, s*0.2);
+  fill(0);
+  textSize(p*2);
+  text("■",p*30.1+x-s, p*2.6+y-s/2);
+}

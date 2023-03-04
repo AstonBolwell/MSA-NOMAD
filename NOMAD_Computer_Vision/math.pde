@@ -59,7 +59,7 @@ void calcTravel(float fr){
   float dL = speed[0] * Full_MM_S * dT;
   float dR = speed[1] * Full_MM_S * dT;
   
-  NOMAD_A -= (dL - dR) * 0.003;
+  NOMAD_A += (dR - dL) / COA_D;
   
   NOMAD_X += (dL + dR) * 0.5 * cos(NOMAD_A) ;
   NOMAD_Y += (dL + dR) * 0.5 * sin(NOMAD_A);
