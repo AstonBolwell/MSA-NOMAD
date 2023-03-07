@@ -52,10 +52,10 @@ float[] TankDrive(float xIn, float yIn){
   return ret;
 }
 
-void calcTravel(float fr){  
+void calcTravel(float fr){
   float dT = 1/fr; //delta time based off the framerate
   
-  float[] speed = TankDrive(joyX, joyY);
+  float[] speed = useJoystick ? TankDrive(joyX, joyY) : TankDrive(autoX, autoY);
   float dL = speed[0] * Full_MM_S * dT;
   float dR = speed[1] * Full_MM_S * dT;
   

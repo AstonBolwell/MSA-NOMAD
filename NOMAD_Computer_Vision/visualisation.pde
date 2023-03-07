@@ -65,9 +65,9 @@ void drawModel(int x, int y, float s, float rs, float a){
   
   //draw sensors
   PIN(A0,createSensor(120,120,-PI/4));
-  //PIN(A2,createSensor(-120,-120,-PI/4));
-  //PIN(A1,createSensor(120,-120,PI/4));
-  //PIN(A3,createSensor(-120,120,PI/4));
+  PIN(A2,createSensor(-120,-120,-PI/4));
+  PIN(A1,createSensor(120,-120,PI/4));
+  PIN(A3,createSensor(-120,120,PI/4));
   
   //reset transformations
   rotate(-a);

@@ -17,9 +17,14 @@ int INPUT_PULLDOWN = 0;
 boolean LOW = false;
 boolean HIGH = true;
 
-float analogRead(int pin){
+//states
+boolean useJoystick = true;
+float autoX = 0;
+float autoY = 0;
+
+int analogRead(int pin){
   if(pinmodes[pin]==INPUT && pin>=A0){
-    return pinstates[pin];
+    return round(pinstates[pin] * 1023);
   }else{
     return 0;
   }
@@ -97,4 +102,27 @@ void drawArduino(int xPos, int yPos, float s){
   fill(0);
   textSize(p*2);
   text("■",p*30.1+x-s, p*2.6+y-s/2);
+}
+
+void setAuto(boolean auto){
+  useJoystick = !auto;
+}
+
+void drive(float x,float y){
+  if(!useJoystick){
+    autoX = x;
+    autoY = y;
+  }
+}
+
+void driveX(float x){
+  if(!useJoystick){
+    autoX = x;
+  }
+}
+
+void driveY(float y){
+  if(!useJoystick){
+    autoY = y;
+  }
 }
