@@ -1,0 +1,137 @@
+// NOT ALL WIRES ARE THE SAME. SOME DON'T HAVE DATA LINES
+
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#include <WiFiUdp.h>
+
+char LED_PIN = D4; // THE LED PIN is 4. Its on when LOW, off when HIGH. This goes for WEMOS and NODEMCU and D1 Mini Pro
+
+// Set AP credentials
+#define AP_SSID "BofaDeez"
+#define AP_PASS "NuckulusRift" // PASSWORDS NEED TO BE LONGER THAN 8 CHARACTERS
+
+// UDP
+WiFiUDP UDP;
+IPAddress local_IP(192, 168, 4, 1);
+IPAddress gateway(192, 168, 4, 1);
+IPAddress subnet(255, 255, 255, 0);
+#define UDP_PORT 4210
+
+// UDP Buffer
+char packetBuffer[255] = {0}; // // Instead of UDP_TX_PACKET_MAX_SIZE, use at least 48 https://forum.arduino.cc/t/udp-read-udp_tx_packet_max_size/287161/4
+
+int freeheap = 0;
+
+unsigned long previousMillis = 0;
+
+const long interval = 1000;
+
+unsigned long currentMillis = 0; // = millis();
+
+void setup() {
+  // put your setup code here, to run once:
+
+  /*
+    pinMode(D8, OUTPUT);
+    pinMode(D7, OUTPUT);
+    pinMode(D6, OUTPUT);
+    pinMode(D5, OUTPUT);
+    pinMode(D0, OUTPUT);
+  */
+
+  // Setup LED pin
+  pinMode(LED_PIN, OUTPUT);
+  digitalWrite(LED_PIN, HIGH);
+
+  // Setup serial port
+  Serial.begin(115200);
+  Serial.println();
+
+  // Begin Access Point
+  Serial.println("Starting access point...");
+  WiFi.softAPConfig(local_IP, gateway, subnet);
+  WiFi.softAP(AP_SSID, AP_PASS);
+  Serial.println(WiFi.softAPIP()); // You should be using WiFi.softAPIP(); (not localIP since latters for clients) to get the AP IP address. https://arduino.stackexchange.com/questions/74494/esp8266-i-am-trying-to-establish-a-softap-and-i-cant-seem-to-get-the-wifilocali
+
+  // Begin listening to UDP port
+  UDP.begin(UDP_PORT);
+  Serial.print("Listening on UDP port ");
+  Serial.println(UDP_PORT);
+
+  digitalWrite(LED_PIN, LOW);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  // if there's data available, read a packet
+  int packetSize = UDP.parsePacket();
+  if (packetSize)
+  {
+    // Begin Timer for 5 seconds
+    currentMillis = millis();
+
+    if (packetSize)
+    {
+      previousMillis = currentMillis; // Mark the time
+      
+      UDP.read(packetBuffer, 255); // Instead of UDP_TX_PACKET_MAX_SIZE, use at least 48 https://forum.arduino.cc/t/udp-read-udp_tx_packet_max_size/287161/4
+
+      Serial.write(packetBuffer, sizeof(packetBuffer));
+      Serial.write('\n');
+      
+      packetBuffer[0] = '\0';
+    }
+  }
+
+}
+
+int deco(char input[])
+{
+  //char inputarr[25] = input;
+  char outputarr[10] = {0};
+  int outputint = 0;
+
+  //char input[210
+
+  for (int i = 0; i < sizeof(input); i++)
+  {
+    if (input[i] != '<')
+    {
+      for (int j = 0; j < sizeof(input); i++, j++)
+      {
+        if (input[i] == ',')
+        {
+          break;
+        }
+        outputarr[j] = input[i];
+      }
+
+      break;
+    }
+  }
+
+  // Convert to int
+
+  outputint = atoi(outputarr);
+
+  return outputint;
+}
+
+/*
+
+
+  // Receive packet
+  UDP.parsePacket();
+  UDP.read(packetBuffer, 69); // Instead of UDP_TX_PACKET_MAX_SIZE, use at least 48 https://forum.arduino.cc/t/udp-read-udp_tx_packet_max_size/287161/4
+
+  Serial.write(packetBuffer, sizeof(packetBuffer));
+  Serial.write('\n');
+
+  // freeheap = ESP.getFreeHeap();
+  // https://arduino-esp8266.readthedocs.io/en/latest/libraries.html
+
+  Serial.println(ESP.getFreeHeap());
+
+  packetBuffer[0] = '\0';
+*/
