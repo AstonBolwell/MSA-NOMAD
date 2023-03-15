@@ -2,6 +2,7 @@
 //This is for testing sensor/motor auto-movement code before using the algorithm on the real thing
 int USSthreshhold = 100;
 
+
 void Setup(){
   pinMode(A0, INPUT); //USS Bottom Right
   pinMode(A1, INPUT); //USS Top Right
@@ -25,4 +26,13 @@ void Loop(){
   }else{
     drive(0,1);
   }
+}
+
+float[] getRadialPosition(float x, float y, float a, float d){
+  float retval[] = {x,y};
+  
+  retval[0] += cos(a)*d;
+  retval[1] += sin(a)*d;
+  
+  return retval;
 }
